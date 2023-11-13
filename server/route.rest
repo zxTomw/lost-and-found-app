@@ -7,7 +7,18 @@ POST http://127.0.0.1:8080/user/register
 Content-Type: application/json
 
 {
+    "userName": "Jerry",
+    "phone": "1234590",
+    "email": "jerry@test.test",
+    "password": "1234"
+}
+
+###
+
+POST http://127.0.0.1:8080/user/login
+Content-Type: application/json
+
+{
     "userName": "Tom",
-    "email": "tom.wang3@uwaterloo.ca",
     "password": "1234"
 }

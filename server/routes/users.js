@@ -17,8 +17,22 @@ router.get('/', async (req, res) => { // to be deleted
 
 router.post('/login', async (req, res) => {
   try {
+    // validates user existance
+    user = await User.findOne({
+        $or: [{userName: req.body.userName}, {email: req.body.email}]
+    });
+    if (!user) return res.status(400).send(
+        { error: "user does not exist" }
+    );
+    // try login
+    if (await bcrypt.compare(req.body.password, user.password)) {
+        res.status(200).send();
+    } else {
+        res.status(401).send();
+    }
     
   } catch (error) {
+    console.log(error);
     res.status(500).send();
   }
 });
@@ -29,8 +43,7 @@ router.post('/register',  async (req, res) => {
             {userName: req.body.userName},
             {email: req.body.email}
         ]});
-        if (foundUser.length) { // verify for conflicts
-            console.log(foundUser);
+        if (foundUser.length) { // handle conflicts
             return res.status(409).send();
         }
         // create user
