@@ -25,14 +25,23 @@ router.post('/login', async (req, res) => {
 
 router.post('/register',  async (req, res) => {
     try {
-        db.users.find({ email: req.body.email })
+       foundUser = await User.find({$or: [
+            {userName: req.body.userName},
+            {email: req.body.email}
+        ]});
+        if (foundUser.length) { // verify for conflicts
+            console.log(foundUser);
+            return res.status(409).send();
+        }
+        // create user
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const user = {
-            username: req.body.username,
+            userName: req.body.userName,
             email: req.body.email,
             password: hashedPassword,
         };
-        // store into database
+        User.create(user);
+        
         res.status(201).send();
     } catch (error) {
         res.status(500).send();

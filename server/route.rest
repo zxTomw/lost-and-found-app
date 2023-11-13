@@ -1,1 +1,13 @@
 GET  http://127.0.0.1:8080/user
+
+###
+
+
+POST http://127.0.0.1:8080/user/register
+Content-Type: application/json
+
+{
+    "userName": "Tom",
+    "email": "tom.wang3@uwaterloo.ca",
+    "password": "1234"
+}
