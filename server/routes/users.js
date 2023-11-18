@@ -21,7 +21,7 @@ router.post('/login', async (req, res) => {
   try {
     // validates user existance
     const user = await User.findOne({
-        $or: [{userName: req.body.userName}, {email: req.body.email}]
+        $or: [{username: req.body.username}, {email: req.body.email}]
     });
     if (!user) return res.status(400).send(
         { error: "user does not exist" }
@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
 router.post('/register',  async (req, res) => {
     try {
         const foundUser = await User.find({$or: [
-            {userName: req.body.userName},
+            {username: req.body.username},
             {email: req.body.email}
         ]});
         if (foundUser.length) { // handle conflicts
@@ -53,7 +53,7 @@ router.post('/register',  async (req, res) => {
         // create user
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const user = {
-            userName: req.body.userName,
+            username: req.body.username,
             email: req.body.email,
             password: hashedPassword,
         };
@@ -66,11 +66,40 @@ router.post('/register',  async (req, res) => {
     }
 })
 
+// update user
+router.put('/', tokenAuth, async (req, res) => {
+    try {
+        let user = await User.findById(req.user._id);
+        const newEmail = req.body.email;
+        const newPassword = req.body.password;
+        if (newEmail) {
+            let findConflict = await User.findOne({
+                $and: [
+                    {'_id': {$ne: req.user._id}},
+                    {'email': newEmail},
+                ]
+            })
+            if (findConflict) return res.status(409).send(
+                { error: "email unavailable" } 
+            );
+            user.email = newEmail;
+        }
+        if (newPassword) {
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            user.password = hashedPassword;
+        };
+        await user.save();
+        return res.status(200).send(user);
+    } catch (error) {
+        console.error(error);
+        return res.sendStatus(500);
+    }
+})
 
 // read this user
 router.get('/', tokenAuth, async (req, res) => {
     try {
-        const user = await User.findOne({_id: req.user._id}).select("-password");
+        const user = await User.findById(req.user._id).select("-password");
         if (user) {
             return res.status(200).send(user);
         } else {

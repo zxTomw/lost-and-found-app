@@ -4,7 +4,7 @@ export default function (user) {
     return jwt.sign(
         {
             _id: user._id,
-            userName: user.userName,
+            username: user.username,
             email: user.email,
         },
         process.env.JWT_SECRET,
