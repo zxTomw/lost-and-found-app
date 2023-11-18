@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export default function generateToken(user) {
+export default function (user) {
     return jwt.sign(
         {
             _id: user._id,

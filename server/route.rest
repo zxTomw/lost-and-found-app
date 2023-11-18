@@ -1,4 +1,5 @@
 GET  http://127.0.0.1:8080/user
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTUyODM1MDA2ODE0MjQ4NjdjZmQxNDUiLCJ1c2VyTmFtZSI6IlRvbSIsImVtYWlsIjoidG9tLndhbmczQHV3YXRlcmxvby5jYSIsImlhdCI6MTcwMDI5MTExMywiZXhwIjoxNzAxMTU1MTEzfQ.TEsNNGVDFHmK-BdbS6CdzJ_0cWvDlvDqobiInsX22xw
 
 ### Sign up
 
@@ -18,6 +19,6 @@ POST http://127.0.0.1:8080/user/login
 Content-Type: application/json
 
 {
-    "userName": "Jerry",
+    "userName": "Tom",
     "password": "1234"
 }

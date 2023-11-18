@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    profile: {
+        about: String,
+        link: String
+    },
     createDate: {
         type: Date,
         required: true,

@@ -1,12 +1,13 @@
 import express from "express";
-import User from "../models/user.js"
-import bcrypt from "bcrypt"
+import User from "../models/user.js";
+import bcrypt from "bcrypt";
 import generateToken from "../utils/generateToken.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router()
 export default router;
 
-router.get('/', async (req, res) => { // to be deleted
+router.get('/all', async (req, res) => { // to be deleted
     try {
         const users = await User.find();
         res.status(200).json(users);
@@ -42,7 +43,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/register',  async (req, res) => {
     try {
-       const foundUser = await User.find({$or: [
+        const foundUser = await User.find({$or: [
             {userName: req.body.userName},
             {email: req.body.email}
         ]});
@@ -65,3 +66,12 @@ router.post('/register',  async (req, res) => {
     }
 })
 
+router.get('/', auth, async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.user._id}).select("-password");
+        res.status(200).send(user);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+})
