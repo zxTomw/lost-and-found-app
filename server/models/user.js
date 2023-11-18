@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
         about: String,
         link: String
     },
+    items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }],
     createDate: {
         type: Date,
         required: true,

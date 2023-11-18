@@ -66,10 +66,27 @@ router.post('/register',  async (req, res) => {
     }
 })
 
+
+// read this user
 router.get('/', tokenAuth, async (req, res) => {
     try {
         const user = await User.findOne({_id: req.user._id}).select("-password");
-        res.status(200).send(user);
+        if (user) {
+            return res.status(200).send(user);
+        } else {
+            res.sendStatus(410);
+        }
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+})
+
+// delete this user
+router.delete('/', tokenAuth, async (req, res) => {
+    try {
+        await User.findOneAndDelete({_id: req.user._id});
+        res.sendStatus(204);
     } catch (error) {
         console.error(error);
         res.sendStatus(500);
