@@ -2,7 +2,7 @@ import express from "express";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import generateToken from "../utils/generateToken.js";
-import { tokenAuth, apiAuth } from "../middleware/auth.js";
+import { tokenAuth } from "../middleware/auth.js";
 
 const router = express.Router()
 export default router;

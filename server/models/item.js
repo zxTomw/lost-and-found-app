@@ -26,7 +26,6 @@ const itemSchema = new mongoose.Schema({
                 type: [Number],
                 required: true
             },
-            index: '2dsphere'
         }
     },
     createDate: {
@@ -35,5 +34,7 @@ const itemSchema = new mongoose.Schema({
         default: Date.now
     }
 })
+
+itemSchema.index({ "place.location": '2dsphere' })
 
 export default mongoose.model('Item', itemSchema);

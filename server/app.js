@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import usersRouter from "./routes/users.js";
+import itemsRouter from "./routes/items.js"
 import { apiAuth } from "./middleware/auth.js";
 
 dotenv.config();
@@ -16,6 +17,7 @@ db.on('error', (error) => console.log(error));
 db.once('open', () => console.log("connected to database"));
 
 app.use('/user', usersRouter);
+app.use('/items', itemsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://127.0.0.1:${PORT}`);
