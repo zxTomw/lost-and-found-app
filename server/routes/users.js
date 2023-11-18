@@ -2,7 +2,7 @@ import express from "express";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import generateToken from "../utils/generateToken.js";
-import auth from "../middleware/auth.js";
+import { tokenAuth, apiAuth } from "../middleware/auth.js";
 
 const router = express.Router()
 export default router;
@@ -66,7 +66,7 @@ router.post('/register',  async (req, res) => {
     }
 })
 
-router.get('/', auth, async (req, res) => {
+router.get('/', tokenAuth, async (req, res) => {
     try {
         const user = await User.findOne({_id: req.user._id}).select("-password");
         res.status(200).send(user);

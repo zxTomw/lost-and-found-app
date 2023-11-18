@@ -2,11 +2,12 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import usersRouter from "./routes/users.js";
+import { apiAuth } from "./middleware/auth.js";
 
 dotenv.config();
 
 const app = express();
-app.use(express.json()); // For parsing application/json
+app.use(express.json(), apiAuth); // For parsing application/json
 const PORT = 8080;
 
 mongoose.connect(process.env.DATABASE_URL);
