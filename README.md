@@ -13,4 +13,4 @@ npm run devstart
 
 ## API Documentation
 
-For detailed API documentation, see the [OpenAPI Specification](./server/api-spec.yaml) of this project.
+For detailed API documentation, see the [OpenAPI Specification](./server/api-doc.yaml) of this project.
