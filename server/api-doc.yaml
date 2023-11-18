@@ -1,0 +1,148 @@
+---
+openapi: 3.0.0
+info:
+  title: ""
+  description: ""
+  version: "0"
+servers:
+- url: https://virtserver.swaggerhub.com/TOMWANG3/lost-and-found/0
+  description: SwaggerHub API Auto Mocking
+security:
+- ApiKeyAuth: []
+paths:
+  /user/register:
+    post:
+      summary: Register a new user
+      description: Endpoint for user registration in the Lost and Found application.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user_register_body'
+        required: true
+      responses:
+        "201":
+          description: User successfully registered
+        "409":
+          description: userName/email already exists
+  /user:
+    get:
+      summary: Get signed-in user information
+      description: Retrieve information of the user who is currently signed in.
+      responses:
+        "200":
+          description: Successfully retrieved user information
+          content:
+            application/json:
+              schema:
+                type: object
+                description: User information (structure not well-defined yet)
+        "401":
+          description: Unauthorized - Invalid or no token provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "410":
+          description: Gone - User is already deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_410'
+      security:
+      - BearerAuth: []
+    delete:
+      summary: Delete user account
+      description: Deletes the user account of the currently authenticated user.
+      responses:
+        "204":
+          description: Successful deletion of user account
+      security:
+      - BearerAuth: []
+  /user/login:
+    post:
+      summary: User login
+      description: Allows users to log in using either their userName or email.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user_login_body'
+        required: true
+      responses:
+        "200":
+          description: Successful login
+        "400":
+          description: User does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "401":
+          description: Incorrect password
+components:
+  schemas:
+    user_register_body:
+      required:
+      - email
+      - password
+      - userName
+      type: object
+      properties:
+        userName:
+          type: string
+          description: User's unique username
+        email:
+          type: string
+          description: User's email address
+          format: email
+        password:
+          type: string
+          description: User's password
+    inline_response_410:
+      type: object
+      properties:
+        error:
+          type: string
+          description: User deleted error message
+    user_login_body:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: User's userName
+        email:
+          type: string
+          description: User's email address
+          format: email
+        password:
+          type: string
+          description: User's password
+      oneOf:
+      - required:
+        - password
+        - userName
+      - required:
+        - email
+        - password
+    inline_response_401:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Unauthorized access error message
+    inline_response_400:
+      type: object
+      properties:
+        error:
+          type: string
+          description: User does not exist error message
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-api-key
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
