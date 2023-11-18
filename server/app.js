@@ -1,18 +1,19 @@
-require('dotenv').config();
+import dotenv from "dotenv";
+import express from "express";
+import mongoose from "mongoose";
+import usersRouter from "./routes/users.js";
 
-const express = require('express');
-const mongoose = require('mongoose');
+dotenv.config();
 
 const app = express();
 app.use(express.json()); // For parsing application/json
 const PORT = 8080;
 
 mongoose.connect(process.env.DATABASE_URL);
-db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', (error) => console.log(error));
 db.once('open', () => console.log("connected to database"));
 
-const usersRouter = require('./routes/users');
 app.use('/user', usersRouter);
 
 app.listen(PORT, () => {

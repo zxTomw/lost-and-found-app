@@ -1,7 +1,6 @@
 GET  http://127.0.0.1:8080/user
 
-###
-
+### Sign up
 
 POST http://127.0.0.1:8080/user/register
 Content-Type: application/json
@@ -13,12 +12,12 @@ Content-Type: application/json
     "password": "1234"
 }
 
-###
+### Log in
 
 POST http://127.0.0.1:8080/user/login
 Content-Type: application/json
 
 {
-    "userName": "Tom",
+    "userName": "Jerry",
     "password": "1234"
 }

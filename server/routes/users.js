@@ -1,9 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const User = require('../models/user')
-const bcrypt = require('bcrypt');
+import express from "express";
+import User from "../models/user.js"
+import bcrypt from "bcrypt"
+import generateToken from "../utils/generateToken.js";
 
-module.exports = router;
+const router = express.Router()
+export default router;
 
 router.get('/', async (req, res) => { // to be deleted
     try {
@@ -26,7 +27,9 @@ router.post('/login', async (req, res) => {
     );
     // try login
     if (await bcrypt.compare(req.body.password, user.password)) {
-        res.status(200).send();
+        res.status(200).send({
+            token: generateToken(user),
+        });
     } else {
         res.status(401).send();
     }
@@ -60,3 +63,4 @@ router.post('/register',  async (req, res) => {
         res.status(500).send();
     }
 })
+
