@@ -19,7 +19,7 @@ router.get('/', async (req, res) => { // to be deleted
 router.post('/login', async (req, res) => {
   try {
     // validates user existance
-    user = await User.findOne({
+    const user = await User.findOne({
         $or: [{userName: req.body.userName}, {email: req.body.email}]
     });
     if (!user) return res.status(400).send(
@@ -42,7 +42,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/register',  async (req, res) => {
     try {
-       foundUser = await User.find({$or: [
+       const foundUser = await User.find({$or: [
             {userName: req.body.userName},
             {email: req.body.email}
         ]});
@@ -60,6 +60,7 @@ router.post('/register',  async (req, res) => {
         
         res.status(201).send();
     } catch (error) {
+        console.error(error);
         res.status(500).send();
     }
 })
