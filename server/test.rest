@@ -1,0 +1,97 @@
+### variables
+@apiKey=
+@baseUrl=
+@token=
+@userId=
+@itemId=
+
+### ----- Users -----
+
+### Get all users
+
+GET  {{baseUrl}}/user/all
+x-api-key: {{apiKey}}
+
+### Get user info
+
+GET  {{baseUrl}}/user/{{userId}}
+x-api-key: {{apiKey}}
+Authorization: bearer {{token}}
+
+### Sign up
+
+POST {{baseUrl}}/user
+x-api-key: {{apiKey}}
+
+{
+    "username": "some name",
+    "email": "some@email.com",
+    "password": "some plain-text password"
+}
+
+### Log in (get token) (could sign up with username)
+
+POST {{baseUrl}}/user/login
+x-api-key: {{apiKey}}
+
+{
+    "email": "some@email.com",
+    "password": "some plain-text password"
+}
+
+### update basic information
+
+PUT {{baseUrl}}/user
+x-api-key: api_dev_secret
+Authorization: bearer {{token}}
+
+{
+    "email": "new@email.com",
+    "password": "new password"
+}
+
+### Delete current user
+
+DELETE {{baseUrl}}/user
+x-api-key: {{apiKey}}
+Authorization: bearer {{token}}
+
+
+### -----items-----
+
+### Get items
+
+GET {{baseUrl}}/items/
+x-api-key: {{apiKey}}
+
+### Create item
+
+POST {{baseUrl}}/items/
+x-api-key: {{apiKey}}
+Authorization: bearer {{token}}
+
+{   
+    "name": "something",
+    "description": "this is something",
+    "place": {
+        "name": "Home",
+        "location": {
+            "type": "Point",
+            "coordinates": [10.000, -10.000]
+        }
+    }
+}
+
+### Update item
+PUT {{baseUrl}}/items/{{itemId}}
+x-api-key: {{apiKey}}
+Authorization: bearer {{token}}
+
+{
+    "name": "something else",
+    "description": "different"
+}
+
+### delete item
+DELETE {{baseUrl}}/items/{{itemId}}
+x-api-key: {{apiKey}}

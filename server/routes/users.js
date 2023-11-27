@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
     // validates user existance
     const user = await User.findOne({
         $or: [{username: req.body.username}, {email: req.body.email}]
-    });
+    }).select('+password');
     if (!user) return res.status(400).send(
         { error: "user does not exist" }
     );
@@ -41,7 +41,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/register',  async (req, res) => {
+router.post('/',  async (req, res) => {
     try {
         const foundUser = await User.find({$or: [
             {username: req.body.username},
@@ -69,7 +69,7 @@ router.post('/register',  async (req, res) => {
 // update user
 router.put('/', tokenAuth, async (req, res) => {
     try {
-        let user = await User.findById(req.user._id);
+        let user = await User.findById(req.user._id).select('+password');
         const newEmail = req.body.email;
         const newPassword = req.body.password;
         if (newEmail) {
@@ -97,13 +97,14 @@ router.put('/', tokenAuth, async (req, res) => {
 })
 
 // read this user
-router.get('/', tokenAuth, async (req, res) => {
+router.get('/:id?', tokenAuth, async (req, res) => {
     try {
-        const user = await User.findById(req.user._id).select("-password");
+        const userid = req.params.id ? req.params.id : req.user._id;
+        const user = await User.findById(userid).populate('items');
         if (user) {
             return res.status(200).send(user);
         } else {
-            res.sendStatus(410);
+            return res.status(400).send(`could not find user ${userid}`);
         }
     } catch (error) {
         console.error(error);
@@ -114,7 +115,7 @@ router.get('/', tokenAuth, async (req, res) => {
 // delete this user
 router.delete('/', tokenAuth, async (req, res) => {
     try {
-        await User.findOneAndDelete({_id: req.user._id});
+        await User.deleteOne({_id: req.user._id});
         res.sendStatus(204);
     } catch (error) {
         console.error(error);
