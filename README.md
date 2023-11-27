@@ -2,6 +2,7 @@
 This is a web app allowing people to submit and find lost items. 
 
 # Backend
+navigate to `/server`
 
 ## Install Dependencies
 ```shell
